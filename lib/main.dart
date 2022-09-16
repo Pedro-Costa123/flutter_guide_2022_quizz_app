@@ -1,47 +1,61 @@
 import 'package:flutter/material.dart';
 
+import './question.dart';
+import './answer.dart';
+
 //void main() {
 //  runApp(MyApp());
 //}
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  var questionIndex = 0;
+class MyApp extends StatefulWidget {
 
-  void answerQuestion() {
-    questionIndex++;
-    print(questionIndex);
+  @override
+  State<StatefulWidget> createState() {
+    return _MyAppState();
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  var _questionIndex = 0;
+
+  void _answerQuestion() {
+    setState(() {
+      _questionIndex++;
+    });
+    print(_questionIndex);
   }
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      'Whats your favorite color?',
-      'Whats your favorite animal'
+    const questions = [
+      {
+        'questionText':'Whats your favorite color?',
+        'answers':['Black', 'Red', 'Green', 'White'],
+      },
+      {
+        'questionText':'Whats your favorite animal?',
+        'answers':['Rabbit', 'Snake', 'Elephant', 'Lion'],
+      },
+      {
+        'questionText':'Who is your favorite instructor?',
+        'answers':['Max', 'Max', 'Max', 'Max'],
+      },
     ];
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('My First App'),
+          title: Text('Flutter Guide 2022 - Quizz App'),
         ),
         body: Column(
           children: [
-            Text(
-                questions[questionIndex]
+            Question(
+                questions[_questionIndex]['questionText']
             ),
-            ElevatedButton(
-                child: Text('Answer 1'),
-                onPressed: answerQuestion,
-            ),
-            ElevatedButton(
-                child: Text('Answer 2'),
-                onPressed: () => print('Answer 2 chosen!'),
-            ),
-            ElevatedButton(
-                child: Text('Answer 3'),
-                onPressed: answerQuestion,
-            ),
+            ...(questions[_questionIndex]['answers'] as List<String>)
+                .map((answer) => Answer(_answerQuestion, answer)
+            ).toList(),
           ],
         ),
       ),
